@@ -1,0 +1,619 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>FairWhistle — the story: a signed alert, told in full</title>
+<meta name="description" content="Match-integrity surveillance for the TxODDS World Cup hackathon: how FairWhistle works, and the timeline of today's live alert on the World Cup Final — signed and anchored the moment it fired." />
+<link rel="canonical" href="https://fairwhistle.claude.do/story.html" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>" />
+
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="FairWhistle" />
+<meta property="og:title" content="FairWhistle — the story: a signed alert, told in full" />
+<meta property="og:description" content="Match-integrity surveillance for the TxODDS World Cup hackathon. Today's live alert on the World Cup Final, told as a timeline — signed and anchored the moment it fired, not treated as an evolving 'current status.'" />
+<meta property="og:image" content="https://fairwhistle.claude.do/story-assets/og-card.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:url" content="https://fairwhistle.claude.do/story.html" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="FairWhistle — the story: a signed alert, told in full" />
+<meta name="twitter:description" content="A price moved. Here is the signed, timestamped record — not a guess about what it meant." />
+<meta name="twitter:image" content="https://fairwhistle.claude.do/story-assets/og-card.png" />
+
+<style>
+:root {
+  color-scheme: dark;
+  --page: #0b0c0d;
+  --surface: #17181a;
+  --surface-2: #1f2123;
+  --surface-3: #232527;
+  --border: rgba(255,255,255,0.09);
+  --border-strong: rgba(255,255,255,0.18);
+  --ink: #f5f5f3;
+  --ink-2: #c3c2b7;
+  --ink-3: #83817a;
+  --mono: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
+  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --accent: #6fbccf;
+  --accent-ink: #d7eff4;
+  --bk-alpha: #3987e5;
+  --bk-borealis: #1a9c4a;
+  --bk-cirrus: #d55181;
+  --bk-dorado: #c98500;
+  --critical: #d03b3b;
+  --serious: #ec835a;
+  --good: #0ca30c;
+  --warning: #fab219;
+  --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px; --sp-5: 20px;
+  --sp-6: 24px; --sp-8: 32px; --sp-10: 40px; --sp-12: 48px; --sp-16: 64px; --sp-20: 80px;
+  --r-sm: 6px; --r-md: 10px; --r-lg: 16px;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body {
+  margin: 0; background: var(--page); color: var(--ink);
+  font: 17px/1.7 var(--sans); -webkit-font-smoothing: antialiased;
+}
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+code, .mono { font-family: var(--mono); }
+.wrap { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+.prose { max-width: 760px; }
+img { max-width: 100%; display: block; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* ---------- reveal-on-scroll ----------
+   Fails open: content is visible by default (no-JS / slow-JS / IO-unsupported
+   safe). JS adds .pre only once it has successfully wired an observer, then
+   flips to .in on intersection — so a judge never hits invisible content. */
+.reveal { opacity: 1; transform: none; }
+.reveal.pre { opacity: 0; transform: translateY(18px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.reveal.pre.in { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) { .reveal.pre { opacity: 1; transform: none; transition: none; } }
+
+/* ---------- top bar ---------- */
+.topbar { position: sticky; top: 0; z-index: 20; background: rgba(11,12,13,0.86); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); }
+.topbar .inner { display: flex; align-items: center; gap: var(--sp-6); padding: 14px 0; }
+.topbar .word { font-weight: 800; font-size: 17px; letter-spacing: -0.01em; }
+.topbar .word .fair { color: var(--serious); }
+.topbar .tag { color: var(--ink-3); font-size: 12.5px; margin-left: 2px; }
+.topbar nav { margin-left: auto; display: flex; gap: var(--sp-5); font-size: 13.5px; }
+.topbar nav a { color: var(--ink-2); }
+.topbar nav a:hover { color: var(--ink); }
+.topbar nav a.cta { color: var(--good); font-weight: 600; }
+
+/* ---------- eyebrow / section chrome ---------- */
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 8px; font-family: var(--mono);
+  font-size: 12.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent);
+  margin: 0 0 var(--sp-3);
+}
+.eyebrow::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
+section.block { padding: var(--sp-20) 0; border-top: 1px solid var(--border); }
+section.block:first-of-type { border-top: none; }
+h2.h { font-size: clamp(26px, 3.6vw, 38px); line-height: 1.15; margin: 0 0 var(--sp-4); letter-spacing: -0.015em; font-weight: 800; }
+p.lead { font-size: 19px; line-height: 1.65; color: var(--ink-2); margin: 0 0 var(--sp-6); }
+p { color: var(--ink-2); }
+.ink { color: var(--ink); }
+
+/* ---------- tags: real vs simulated (used everywhere a detection is discussed) ---------- */
+.tag-real, .tag-sim, .tag-hist {
+  display: inline-flex; align-items: center; gap: 5px; font-family: var(--mono); font-size: 11px;
+  font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; padding: 2px 8px; border-radius: 999px;
+  vertical-align: 1px; white-space: nowrap;
+}
+.tag-real { background: rgba(12,163,12,0.14); color: #4fd44f; border: 1px solid rgba(12,163,12,0.4); }
+.tag-sim { background: rgba(250,178,25,0.13); color: var(--warning); border: 1px solid rgba(250,178,25,0.4); }
+.tag-hist { background: rgba(111,188,207,0.13); color: var(--accent); border: 1px solid rgba(111,188,207,0.4); }
+
+/* ---------- hero ---------- */
+.hero { padding: var(--sp-10) 0 var(--sp-16); }
+.hero-grid { display: grid; grid-template-columns: minmax(0,1fr); gap: var(--sp-8); align-items: center; }
+.hero h1 { font-size: clamp(38px, 6vw, 64px); line-height: 1.06; letter-spacing: -0.02em; font-weight: 800; margin: var(--sp-3) 0 var(--sp-5); }
+.hero h1 .accent { color: var(--accent); }
+.hero-media { position: relative; border-radius: var(--r-lg); overflow: hidden; border: 1px solid var(--border); }
+.hero-media img { width: 100%; height: auto; }
+.hero-badges { display: flex; flex-wrap: wrap; gap: 8px; margin-top: var(--sp-5); }
+.badge {
+  border: 1px solid var(--border); border-radius: 999px; padding: 4px 11px; font-size: 12.5px;
+  color: var(--ink-2); background: var(--surface); display: inline-flex; align-items: center; gap: 6px;
+}
+.badge .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--good); }
+.badge .dot.pulse { animation: pulse 1.6s ease-in-out infinite; }
+@keyframes pulse { 50% { opacity: 0.3; } }
+.hero-links { margin-top: var(--sp-6); display: flex; flex-wrap: wrap; gap: var(--sp-3); }
+.btn {
+  display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px; border-radius: 999px;
+  font-size: 14px; font-weight: 600; border: 1px solid var(--border-strong);
+}
+.btn.primary { background: var(--accent); color: #06222a; border-color: var(--accent); }
+.btn.primary:hover { background: var(--accent-ink); text-decoration: none; }
+.btn.ghost { color: var(--ink-2); }
+.btn.ghost:hover { color: var(--ink); text-decoration: none; border-color: var(--ink-3); }
+
+/* ---------- 3-up definition cards ---------- */
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-5); margin-top: var(--sp-8); }
+@media (max-width: 860px) { .grid-3 { grid-template-columns: 1fr; } }
+.card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg);
+  padding: var(--sp-6);
+}
+.card .num { font-family: var(--mono); font-size: 12px; color: var(--ink-3); letter-spacing: 0.06em; margin-bottom: var(--sp-2); }
+.card h3 { font-size: 17px; margin: 0 0 8px; letter-spacing: -0.005em; }
+.card p { font-size: 14.5px; margin: 0; line-height: 1.6; }
+
+/* ---------- architecture diagram ---------- */
+.diagram-wrap { margin-top: var(--sp-10); border-radius: var(--r-lg); border: 1px solid var(--border); overflow: hidden; background: var(--surface); }
+.diagram-media img { width: 100%; height: auto; display: block; opacity: 0.9; }
+.diagram-steps {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 0;
+  border-top: 1px solid var(--border);
+}
+@media (max-width: 860px) { .diagram-steps { grid-template-columns: 1fr; } }
+.dstep { padding: var(--sp-5) var(--sp-5); border-right: 1px solid var(--border); position: relative; }
+.dstep:last-child { border-right: none; }
+@media (max-width: 860px) { .dstep { border-right: none; border-bottom: 1px solid var(--border); } .dstep:last-child { border-bottom: none; } }
+.dstep .arrow { position: absolute; right: -11px; top: 50%; transform: translateY(-50%); width: 22px; height: 22px; border-radius: 50%; background: var(--page); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 11px; color: var(--ink-3); z-index: 2; }
+@media (max-width: 860px) { .dstep .arrow { display: none; } }
+.dstep .k { font-family: var(--mono); font-size: 11px; color: var(--accent); letter-spacing: 0.06em; text-transform: uppercase; }
+.dstep h4 { font-size: 14.5px; margin: 6px 0 5px; }
+.dstep p { font-size: 13px; margin: 0; }
+
+/* ---------- centerpiece timeline ---------- */
+.fixture-strip {
+  display: flex; flex-wrap: wrap; gap: var(--sp-2) var(--sp-6); align-items: baseline;
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg);
+  padding: var(--sp-5) var(--sp-6); margin: var(--sp-6) 0 var(--sp-10);
+  font-family: var(--mono); font-size: 13px; color: var(--ink-2);
+}
+.fixture-strip .fx-name { font-family: var(--sans); font-size: 17px; font-weight: 700; color: var(--ink); }
+
+.tl-wrap { margin: var(--sp-10) 0; border: 1px solid var(--border); border-radius: var(--r-lg); background: var(--surface); padding: var(--sp-8) var(--sp-6) var(--sp-6); overflow-x: auto; }
+.tl-media { margin-bottom: var(--sp-6); border-radius: var(--r-md); overflow: hidden; border: 1px solid var(--border); }
+.tl-media img { width: 100%; opacity: 0.85; }
+.tl-track { position: relative; min-width: 640px; height: 190px; margin: var(--sp-6) 0 var(--sp-4); }
+.tl-axis { position: absolute; left: 0; right: 0; top: 92px; height: 2px; background: var(--border-strong); }
+/* Base state = fully revealed (fail-open for no-JS/slow-JS). JS adds .pre to
+   collapse before animating in via .pre.in — see script at end of body. */
+.tl-window {
+  /* spans the full 15:45:54 (watch starts) -> 15:48:57 (alert fires) window */
+  position: absolute; top: 76px; height: 34px; background: rgba(111,188,207,0.14);
+  border: 1px solid rgba(111,188,207,0.5); border-radius: 8px;
+  left: 10%; width: 56%;
+}
+.tl-window.pre { width: 0%; transition: width 1.4s cubic-bezier(.2,.7,.2,1); }
+.tl-window.pre.in { width: 56%; }
+.tl-suppress {
+  /* spans the yellow card (24%) through the shot sequence (58%) — the window
+     that, on recompute, retroactively explains the price move */
+  position: absolute; top: 66px; height: 54px; background: rgba(250,178,25,0.1);
+  border: 1px dashed rgba(250,178,25,0.55); border-radius: 8px;
+  left: 20%; width: 42%;
+}
+.tl-suppress.pre { width: 0%; transition: width 1.4s cubic-bezier(.2,.7,.2,1) 0.5s; }
+.tl-suppress.pre.in { width: 42%; }
+.tl-point { position: absolute; top: 84px; width: 18px; height: 18px; margin-left: -9px; border-radius: 50%; background: var(--surface-2); border: 2px solid var(--ink-3); transform: scale(1); }
+.tl-point.pre { transform: scale(0); transition: transform 0.5s cubic-bezier(.34,1.56,.64,1); }
+.tl-point.pre.in { transform: scale(1); }
+.tl-point.big { width: 24px; height: 24px; margin-left: -12px; top: 81px; background: var(--critical); border-color: #ffb3a3; box-shadow: 0 0 0 6px rgba(208,59,59,0.18); }
+.tl-point.tl-yellowcard { background: var(--warning); border-color: #ffe2a3; }
+.tl-point.shot { background: var(--bk-alpha); border-color: #a9c8f2; }
+.tl-point.clear { background: var(--good); border-color: #9ee79e; }
+.tl-label { position: absolute; top: 118px; width: 190px; margin-left: -95px; font-size: 12.5px; color: var(--ink-2); text-align: center; line-height: 1.45; }
+.tl-label .t { display: block; font-family: var(--mono); font-size: 11.5px; color: var(--ink-3); margin-bottom: 3px; }
+.tl-label .n { font-weight: 700; color: var(--ink); }
+.tl-label.top { top: -34px; }
+.tl-label.top::after { content: ""; position: absolute; left: 50%; bottom: -14px; width: 1px; height: 12px; background: var(--border-strong); }
+
+.tl-legend { display: flex; flex-wrap: wrap; gap: var(--sp-5); font-size: 12px; color: var(--ink-3); margin-top: var(--sp-2); }
+.tl-legend .key { display: inline-flex; align-items: center; gap: 6px; }
+.tl-legend .sw { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
+
+.alert-detail { display: grid; grid-template-columns: 1.1fr 1fr; gap: var(--sp-6); margin-top: var(--sp-10); }
+@media (max-width: 900px) { .alert-detail { grid-template-columns: 1fr; } }
+.detail-card {
+  background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--critical);
+  border-radius: var(--r-lg); padding: var(--sp-6);
+}
+.detail-card.known { border-left-color: var(--warning); }
+.detail-card h3 { margin: 0 0 10px; font-size: 16px; }
+.hashrow { display: flex; gap: 10px; font-family: var(--mono); font-size: 12px; color: var(--ink-3); margin: 6px 0; align-items: baseline; }
+.hashrow .l { min-width: 78px; text-transform: uppercase; letter-spacing: 0.05em; font-size: 10.5px; }
+.hashrow code { color: var(--ink-2); word-break: break-all; }
+.anchor-tx a { font-family: var(--mono); font-size: 11.5px; word-break: break-all; }
+
+.pullquote {
+  margin: var(--sp-12) 0; padding: var(--sp-8) var(--sp-8);
+  border-left: 3px solid var(--accent); background: var(--surface); border-radius: 0 var(--r-lg) var(--r-lg) 0;
+  font-size: 21px; line-height: 1.55; color: var(--ink); font-weight: 500; letter-spacing: -0.005em;
+}
+.pullquote .cite { display: block; margin-top: var(--sp-4); font-family: var(--mono); font-size: 13px; color: var(--ink-3); font-weight: 400; }
+
+.secondary-alert {
+  margin-top: var(--sp-8); padding: var(--sp-5) var(--sp-6); border: 1px dashed var(--border-strong);
+  border-radius: var(--r-lg); font-size: 14px; color: var(--ink-2); background: var(--surface-2);
+}
+.secondary-alert strong { color: var(--ink); }
+
+/* ---------- backtest ---------- */
+.backtest-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-8); align-items: center; margin-top: var(--sp-8); }
+@media (max-width: 900px) { .backtest-grid { grid-template-columns: 1fr; } }
+.backtest-media { border-radius: var(--r-lg); overflow: hidden; border: 1px solid var(--border); }
+.stat-row { display: flex; gap: var(--sp-8); margin: var(--sp-6) 0; flex-wrap: wrap; }
+.stat { }
+.stat .v { font-size: 34px; font-weight: 800; font-family: var(--mono); letter-spacing: -0.02em; color: var(--ink); }
+.stat .l { font-size: 12px; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 2px; }
+.callout {
+  border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: var(--r-md);
+  background: var(--surface-2); padding: var(--sp-5) var(--sp-6); font-size: 15px; color: var(--ink-2); line-height: 1.6;
+}
+.callout strong { color: var(--ink); }
+
+/* ---------- honesty ---------- */
+.honesty-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-5); margin-top: var(--sp-8); }
+@media (max-width: 860px) { .honesty-grid { grid-template-columns: 1fr; } }
+.hcard { border-radius: var(--r-lg); padding: var(--sp-6); border: 1px solid var(--border); background: var(--surface); }
+.hcard.sim { border-top: 3px solid var(--warning); }
+.hcard.live { border-top: 3px solid var(--good); }
+.hcard h3 { margin: 0 0 10px; font-size: 16px; display: flex; align-items: center; gap: 8px; }
+.hcard ul { margin: var(--sp-3) 0 0; padding-left: 18px; font-size: 14px; color: var(--ink-2); }
+.hcard li { margin: 5px 0; }
+.link-row { display: flex; flex-wrap: wrap; gap: var(--sp-3) var(--sp-6); margin-top: var(--sp-8); font-size: 14.5px; }
+.link-row a { color: var(--ink-2); border-bottom: 1px solid var(--border-strong); padding-bottom: 1px; }
+.link-row a:hover { color: var(--accent); border-color: var(--accent); text-decoration: none; }
+
+footer.colophon { padding: var(--sp-12) 0 var(--sp-16); color: var(--ink-3); font-size: 13px; text-align: center; border-top: 1px solid var(--border); margin-top: var(--sp-12); }
+footer.colophon code { font-family: var(--mono); font-size: 12px; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap inner">
+    <span class="word"><span class="fair">Fair</span>Whistle</span>
+    <span class="tag">the story</span>
+    <nav>
+      <a href="/">Dashboard</a>
+      <a href="/live.html">Live</a>
+      <a href="/docs.html">Docs</a>
+      <a href="https://github.com/chaintail/fairwhistle">Repo ↗</a>
+      <a class="cta" href="#centerpiece">● Today's alert</a>
+    </nav>
+  </div>
+</div>
+
+<main class="wrap">
+
+  <!-- ============ HERO ============ -->
+  <section class="hero">
+    <div class="hero-grid">
+      <div class="reveal">
+        <span class="eyebrow">Match-integrity surveillance · TxODDS World Cup hackathon</span>
+        <h1>A price moved.<br />Here's the <span class="accent">signed record</span> —<br />not a guess about what it meant.</h1>
+        <p class="lead prose">
+          FairWhistle is an autonomous agent that watches odds microstructure for
+          repricing patterns public information can't explain, then publishes a
+          timestamped, hashed, <strong class="ink">Ed25519-signed</strong> alert the
+          moment it fires — anchored on Solana so the record can't be quietly edited
+          after the fact.
+        </p>
+        <div class="hero-badges">
+          <span class="badge"><span class="dot pulse"></span> Agent live · autonomous</span>
+          <span class="badge">🔑 Ed25519-signed every alert</span>
+          <span class="badge">⚓ Solana devnet-anchored</span>
+          <span class="badge">🏆 FIFA World Cup Final · today</span>
+        </div>
+        <div class="hero-links">
+          <a class="btn primary" href="#centerpiece">Read today's alert ↓</a>
+          <a class="btn ghost" href="/">Open the live dashboard</a>
+        </div>
+      </div>
+      <div class="hero-media reveal" style="margin-top: var(--sp-8);">
+        <img src="/story-assets/header.png" alt="Abstract visualization of a single price signal spiking above baseline noise and being sealed at its peak." width="1408" height="768" />
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ WHAT / WHY ============ -->
+  <section class="block" id="what">
+    <span class="eyebrow">01 · What it is, and why it matters</span>
+    <h2 class="h">A risk desk for one question</h2>
+    <p class="lead prose">
+      Not a trading strategy. Not a fixing accusation machine. FairWhistle answers
+      exactly one thing before you act on a price: <em class="ink">is there a reason to
+      distrust this quote right now?</em>
+    </p>
+    <div class="grid-3">
+      <div class="card reveal">
+        <div class="num">WHAT</div>
+        <h3>Watches microstructure, not headlines</h3>
+        <p>Three causal detectors read raw odds ticks across books and markets —
+        abnormal repricing velocity, cross-market coordination, and stale-then-snap
+        liquidity pulls. No sentiment, no punditry, no black box.</p>
+      </div>
+      <div class="card reveal">
+        <div class="num">WHY</div>
+        <h3>Fixing and informed money move price first</h3>
+        <p>Both leave the same fingerprint before the public catches up: price moves
+        faster or more coordinated than a public-event window can explain. That
+        fingerprint is what the detectors are built to isolate.</p>
+      </div>
+      <div class="card reveal">
+        <div class="num">HOW HONEST</div>
+        <h3>Point-in-time, not a running verdict</h3>
+        <p>Every alert is hashed and signed the second it fires. It is a record of
+        what the system knew then — never silently rewritten as more information
+        arrives later.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ HOW IT WORKS ============ -->
+  <section class="block" id="how">
+    <span class="eyebrow">02 · How it works</span>
+    <h2 class="h">Odds in, signed record out</h2>
+    <p class="lead prose">Four steps, the same code path for replay, live, and backtest.</p>
+    <div class="diagram-wrap reveal">
+      <div class="diagram-media"><img src="/story-assets/architecture.png" alt="Abstract diagram motif of four connected nodes representing a data pipeline." width="1408" height="768" /></div>
+      <div class="diagram-steps">
+        <div class="dstep"><span class="k">01</span><h4>Odds feed</h4><p>TxLINE consensus book — replay fixture, live mainnet feed, or historical archive, depending on mode.</p><span class="arrow">→</span></div>
+        <div class="dstep"><span class="k">02</span><h4>Detectors</h4><p>Velocity, cross-market coordination, stale-then-snap — pure functions over the price series, no side channels.</p><span class="arrow">→</span></div>
+        <div class="dstep"><span class="k">03</span><h4>Signed alert</h4><p>SHA-256 core hash, Ed25519 signature, detection timestamp. Verifiable in the browser.</p><span class="arrow">→</span></div>
+        <div class="dstep"><span class="k">04</span><h4>Devnet anchor</h4><p>Fingerprint memo'd on-chain — Solana devnet, independently checkable via <code>getTransaction</code>.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CENTERPIECE ============ -->
+  <section class="block" id="centerpiece">
+    <span class="eyebrow">03 · The centerpiece — today's live alert</span>
+    <h2 class="h">15:48:57 ET: an alert fires mid-match</h2>
+    <p class="lead prose">
+      This is <span class="tag-real">REAL</span> — the live TxLINE mainnet feed, today's
+      match, not a rehearsed scenario.
+    </p>
+
+    <div class="fixture-strip">
+      <span class="fx-name">FIFA World Cup Final — Spain v Argentina</span>
+      <span>kickoff <span class="ink">15:06:04 ET</span></span>
+      <span>2026-07-19</span>
+      <span>rule <span class="ink">velocity_live</span></span>
+      <span>market <span class="ink">OU 2.5 · Over</span></span>
+    </div>
+
+    <div class="tl-wrap reveal" id="tl-wrap">
+      <div class="tl-media"><img src="/story-assets/timeline.png" alt="Abstract visualization of a single signal spike above a field of calm noise, later enclosed by a wider band." width="1408" height="768" /></div>
+
+      <div class="tl-track" id="tl-track">
+        <div class="tl-axis"></div>
+        <div class="tl-window" id="tl-window"></div>
+        <div class="tl-suppress" id="tl-suppress"></div>
+
+        <div class="tl-point" style="left:10%" data-label></div>
+        <div class="tl-label" style="left:10%">
+          <span class="t">15:45:54</span><span class="n">Detector starts watching</span>
+        </div>
+
+        <div class="tl-point tl-yellowcard" style="left:24%" data-label></div>
+        <div class="tl-label top" style="left:24%">
+          <span class="t">15:46:13</span><span class="n">Yellow card</span> (public match event)
+        </div>
+
+        <div class="tl-point shot" style="left:58%" data-label></div>
+        <div class="tl-label" style="left:58%">
+          <span class="t">15:48:33–37</span><span class="n">Shot / high-danger sequence</span>
+        </div>
+
+        <div class="tl-point big" style="left:66%" data-label></div>
+        <div class="tl-label top" style="left:66%">
+          <span class="t">15:48:57</span><span class="n">Alert fires</span> · z 5.86
+        </div>
+
+        <div class="tl-point clear" style="left:90%" data-label></div>
+        <div class="tl-label" style="left:90%">
+          <span class="t">minutes later</span><span class="n">Recompute clears</span>
+        </div>
+      </div>
+
+      <div class="tl-legend">
+        <span class="key"><span class="sw" style="background:rgba(111,188,207,0.6)"></span> detector watch window (15:45:54–15:48:57 ET)</span>
+        <span class="key"><span class="sw" style="background:var(--warning)"></span> match-event / suppression window</span>
+        <span class="key"><span class="sw" style="background:var(--critical)"></span> alert fires</span>
+        <span class="key"><span class="sw" style="background:var(--good)"></span> recompute clears</span>
+      </div>
+    </div>
+
+    <p class="prose">
+      Over roughly three minutes, <code>velocity_live</code> watched OU 2.5 · Over
+      reprice <strong class="ink">+6.4%</strong> on the real TxLINE mainnet consensus
+      feed — peak z-score <strong class="ink">5.86</strong> against a threshold of 5,
+      with no public explanation visible in the data available at that moment. At
+      <strong class="ink">15:48:57 ET</strong> the alert fired.
+    </p>
+
+    <div class="alert-detail">
+      <div class="detail-card reveal">
+        <h3>🔒 What was signed</h3>
+        <div class="hashrow"><span class="l">core hash</span><code>fd21174f5a2ba63aebf23e893161606712472e8510646051c5e052f356c36e01</code></div>
+        <div class="hashrow"><span class="l">signature</span><code>Ed25519 · agent key · at detection time</code></div>
+        <div class="hashrow"><span class="l">anchor</span><code class="anchor-tx"><a href="https://explorer.solana.com/tx/2aGGupFvzGQUKsSmmA57vMyNxaA3CezF4rRUBCSgh6vqCGoF6gb6wXZhDt9S6ecWkuoL6fHFKENo547EaTF3ZXun?cluster=devnet">2aGGupFvzGQUKsSmmA57vMyNxaA3CezF4rRUBCSgh6vqCGoF6gb6wXZhDt9S6ecWkuoL6fHFKENo547EaTF3ZXun</a></code></div>
+        <p style="margin-top:10px;font-size:13px;">Solana devnet, confirmed on-chain, independently verified by us via <code>getTransaction</code>.</p>
+      </div>
+      <div class="detail-card known reveal">
+        <h3>🟡 What the detector didn't know yet</h3>
+        <p style="font-size:14.5px;margin:0 0 8px;">
+          A yellow card had occurred at <strong class="ink">15:46:13 ET</strong>, and a
+          shot / high-danger-possession sequence at <strong class="ink">15:48:33–37 ET</strong>
+          — both real, public match events.
+        </p>
+        <p style="font-size:14.5px;margin:0;">
+          The free-tier score/action feed lags the odds feed, so this data hadn't
+          arrived when the detector fired. <strong class="ink">Minutes later</strong>,
+          once the score feed caught up, a fresh recompute no longer surfaces this
+          alert — both events now fall inside the detector's own suppression window,
+          explaining the price move as legitimate public reaction, not fixing.
+        </p>
+      </div>
+    </div>
+
+    <blockquote class="pullquote reveal">
+      “The signed record is the feature. A live detector working with partial
+      information will sometimes flag something that a fuller picture later
+      explains — that's not a flaw, it's exactly why the alert is signed and
+      anchored the moment it fires, not treated as an evolving ‘current status.’
+      Point-in-time attestation beats hindsight: nobody can retroactively pretend
+      the system didn't flag it, and nobody can retroactively claim it proved
+      fixing when it didn't.”
+      <span class="cite">— FairWhistle design frame</span>
+    </blockquote>
+
+    <div class="secondary-alert">
+      There was also a second, earlier live alert today (<code>cd34f356c930</code>,
+      ~15:30 ET) — <span class="tag-real">REAL</span> but <strong>video-only</strong>:
+      we have video evidence of it firing, not the full underlying data, so it isn't
+      independently anchored. Mentioned here for completeness; <code>fd21174f5a2b…</code>
+      above is the centerpiece and the one we can fully evidence.
+    </div>
+  </section>
+
+  <!-- ============ BACKTEST ============ -->
+  <section class="block" id="backtest">
+    <span class="eyebrow">04 · Backtest capability</span>
+    <h2 class="h">The same detector, run across a tournament</h2>
+    <div class="backtest-grid">
+      <div class="reveal">
+        <p class="lead" style="font-size:17px;">
+          <span class="tag-hist">REAL · historical archive</span> — a standalone copy of
+          the live detection math, run against a local, pre-captured archive of real
+          TxLINE World Cup fixture data (not synthetic).
+        </p>
+        <div class="stat-row">
+          <div class="stat"><div class="v">105</div><div class="l">fixtures swept</div></div>
+          <div class="stat"><div class="v">~42s</div><div class="l">total run time</div></div>
+          <div class="stat"><div class="v">1:1</div><div class="l">fidelity vs. live detector</div></div>
+        </div>
+        <div class="callout">
+          <strong>Full-tournament backtest capability demonstrated (105 fixtures, ~42
+          seconds, exact fidelity match vs. the live detector); per-market threshold
+          calibration identified as the next step.</strong> That sweep surfaced 272
+          alerts across those fixtures at one fixed threshold tuned for a single
+          match's noise profile — a count that needs per-market calibration before it
+          means anything as a standalone signal, not a finding of anomalies.
+        </div>
+      </div>
+      <div class="backtest-media reveal">
+        <img src="/story-assets/backtest.png" alt="Abstract visualization of many parallel data traces swept uniformly, representing a systematic sweep across many fixtures." width="1408" height="768" />
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ HONESTY ============ -->
+  <section class="block" id="honesty">
+    <span class="eyebrow">05 · Honesty, in full</span>
+    <h2 class="h">What's real, what's staged, every time</h2>
+    <div class="honesty-grid">
+      <div class="hcard sim reveal">
+        <h3>⚠ Replay fixture <span class="tag-sim">SIMULATED</span></h3>
+        <p style="font-size:14.5px;margin:0;">The default view on the dashboard is a
+        deterministic, seeded, synthetic tape — 3 planted, openly-labeled anomalies,
+        looped every 10 minutes. Always available, never live data.</p>
+        <ul>
+          <li>Detectors never see scenario metadata — same code path as live</li>
+          <li>Used to demonstrate detection logic on demand, not to report real events</li>
+        </ul>
+      </div>
+      <div class="hcard live reveal">
+        <h3>● Live mode <span class="tag-real">REAL</span></h3>
+        <p style="font-size:14.5px;margin:0;">The real FIFA World Cup Final via TxLINE
+        mainnet consensus odds — free tier, a single consensus book, ~60s batch delay.
+        Everything in the centerpiece above came from this mode.</p>
+        <ul>
+          <li>No execution, no trades — a pre-trade integrity check only</li>
+          <li>Every live alert is signed at detection time, same as replay</li>
+        </ul>
+      </div>
+    </div>
+    <div class="link-row">
+      <a href="/">Live dashboard →</a>
+      <a href="/live.html">Live surveillance view →</a>
+      <a href="/docs.html">Agent &amp; API docs →</a>
+      <a href="/llms.txt">/llms.txt →</a>
+      <a href="https://github.com/chaintail/fairwhistle">Repo ↗</a>
+    </div>
+  </section>
+
+</main>
+
+<footer class="colophon">
+  <div class="wrap">
+    Built for the TxODDS World Cup hackathon · fixture <code>18257739</code> ·
+    agent key verifiable at <a href="/api/meta">/api/meta</a><br />
+    <a href="/">Dashboard</a> · <a href="/live.html">Live</a> · <a href="/docs.html">Docs</a> · <a href="/llms.txt">llms.txt</a>
+  </div>
+</footer>
+
+<script>
+// Progressive-enhancement scroll reveal. Content is visible by CSS default;
+// this only ever ADDS a temporary .pre (collapsed) state before animating
+// back in, and every path has a hard time-boxed fallback to .in so a slow
+// or partially-broken script can never leave real content permanently hidden.
+(function () {
+  if (!('IntersectionObserver' in window)) return; // base CSS is already the fully-visible state
+
+  var els = Array.prototype.slice.call(document.querySelectorAll('.reveal'));
+  var tlWrap = document.getElementById('tl-wrap');
+  var tlWindow = document.getElementById('tl-window');
+  var tlSuppress = document.getElementById('tl-suppress');
+  var points = Array.prototype.slice.call(document.querySelectorAll('.tl-point'));
+
+  function armReveal(el) {
+    el.classList.add('pre');
+    var done = false;
+    var settle = function () {
+      if (done) return;
+      done = true;
+      el.classList.add('in');
+    };
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) { settle(); io.disconnect(); }
+      });
+    }, { threshold: 0.15 });
+    io.observe(el);
+    setTimeout(settle, 4000); // safety net: never stay collapsed longer than this
+  }
+
+  els.forEach(armReveal);
+
+  if (tlWrap && tlWindow && tlSuppress) {
+    tlWindow.classList.add('pre');
+    tlSuppress.classList.add('pre');
+    points.forEach(function (p) { p.classList.add('pre'); });
+
+    var settleTimeline = (function () {
+      var done = false;
+      return function () {
+        if (done) return;
+        done = true;
+        tlWindow.classList.add('in');
+        tlSuppress.classList.add('in');
+        points.forEach(function (p, i) {
+          setTimeout(function () { p.classList.add('in'); }, 200 + i * 160);
+        });
+      };
+    })();
+
+    var tio = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) { settleTimeline(); tio.disconnect(); }
+      });
+    }, { threshold: 0.25 });
+    tio.observe(tlWrap);
+    setTimeout(settleTimeline, 4500);
+  }
+})();
+</script>
+</body>
+</html>
