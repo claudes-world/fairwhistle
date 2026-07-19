@@ -201,14 +201,16 @@ function alertCard(a) {
   return `<div class="alert-card ${a.severity}">
     <div class="alert-head">
       <span class="sev ${a.severity}">${a.severity === "critical" ? "◆ CRITICAL" : "▲ HIGH"}</span>
-      <span style="color:var(--ink-3);font-size:11.5px">${esc(a.core.rule)}</span>
+      <span class="rule-tag">${esc(a.core.rule)}</span>
       <span class="alert-when">${minute}' · ${esc(a.instance.detectedAt.replace("T", " ").slice(0, 19))}Z</span>
     </div>
     <h3>${esc(a.core.headline)}</h3>
     <p class="narrative">${esc(a.core.narrative)}</p>
-    <div class="hashrow"><span class="label">fingerprint</span><code title="${esc(a.coreHash)}">${esc(a.coreHash)}</code></div>
-    <div class="hashrow"><span class="label">instance</span><code title="${esc(a.instanceHash)}">${esc(a.instanceHash)}</code></div>
-    <div class="hashrow"><span class="label">signature</span><code title="${esc(a.signature)}">${esc(a.signature.slice(0, 32))}…</code></div>
+    <div class="ledger">
+      <div class="hashrow"><span class="label">fingerprint</span><code title="${esc(a.coreHash)}">${esc(a.coreHash)}</code></div>
+      <div class="hashrow"><span class="label">instance</span><code title="${esc(a.instanceHash)}">${esc(a.instanceHash)}</code></div>
+      <div class="hashrow"><span class="label">signature</span><code title="${esc(a.signature)}">${esc(a.signature.slice(0, 32))}…</code></div>
+    </div>
     <div class="alert-actions">
       <button class="act" id="verify-${a.id}">Verify signature</button>
       <button class="act" id="evtoggle-${a.id}">Evidence</button>

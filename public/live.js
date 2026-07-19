@@ -108,13 +108,15 @@ function renderAlerts() {
     .map((a) => `<div class="alert-card ${a.severity}">
       <div class="alert-head">
         <span class="sev ${a.severity}">${a.severity === "critical" ? "◆ CRITICAL" : "▲ HIGH"}</span>
-        <span style="color:var(--ink-3);font-size:11.5px">${esc(a.core.rule)} · LIVE</span>
+        <span class="rule-tag">${esc(a.core.rule)} · LIVE</span>
         <span class="alert-when">${esc(new Date(a.core.tsDetect).toISOString().replace("T", " ").slice(0, 19))}Z</span>
       </div>
       <h3>${esc(a.core.headline)}</h3>
       <p class="narrative">${esc(a.core.narrative)}</p>
-      <div class="hashrow"><span class="label">fingerprint</span><code title="${esc(a.coreHash)}">${esc(a.coreHash)}</code></div>
-      <div class="hashrow"><span class="label">signature</span><code title="${esc(a.signature)}">${esc(a.signature.slice(0, 32))}…</code></div>
+      <div class="ledger">
+        <div class="hashrow"><span class="label">fingerprint</span><code title="${esc(a.coreHash)}">${esc(a.coreHash)}</code></div>
+        <div class="hashrow"><span class="label">signature</span><code title="${esc(a.signature)}">${esc(a.signature.slice(0, 32))}…</code></div>
+      </div>
       <div class="alert-actions">
         <button class="act" id="verify-${a.id}">Verify signature</button>
         <span id="verdict-${a.id}"></span>
@@ -157,9 +159,14 @@ async function verifyAlert(a) {
   }
 }
 
-$("rng-90").addEventListener("click", () => { S.rangeMs = 90 * 60_000; render(); });
-$("rng-6").addEventListener("click", () => { S.rangeMs = 6 * 3600_000; render(); });
-$("rng-48").addEventListener("click", () => { S.rangeMs = 48 * 3600_000; render(); });
+const RNG_BTNS = [$("rng-90"), $("rng-6"), $("rng-48")];
+function setActiveRangeBtn(btn) {
+  for (const b of RNG_BTNS) b.classList.toggle("is-active", b === btn);
+}
+$("rng-90").addEventListener("click", (ev) => { S.rangeMs = 90 * 60_000; setActiveRangeBtn(ev.currentTarget); render(); });
+$("rng-6").addEventListener("click", (ev) => { S.rangeMs = 6 * 3600_000; setActiveRangeBtn(ev.currentTarget); render(); });
+$("rng-48").addEventListener("click", (ev) => { S.rangeMs = 48 * 3600_000; setActiveRangeBtn(ev.currentTarget); render(); });
+setActiveRangeBtn($("rng-6"));
 
 poll();
 setInterval(poll, 20000);
