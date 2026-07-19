@@ -157,6 +157,7 @@ async function verifyAlert(a) {
   }
 }
 
+$("rng-90").addEventListener("click", () => { S.rangeMs = 90 * 60_000; render(); });
 $("rng-6").addEventListener("click", () => { S.rangeMs = 6 * 3600_000; render(); });
 $("rng-48").addEventListener("click", () => { S.rangeMs = 48 * 3600_000; render(); });
 
