@@ -67,7 +67,7 @@ Deploy it and walk away: it is *incapable* of needing manual intervention.
 | Match events | Scripted fixture events (goal / red card / goal) used for suppression logic. |
 | Ed25519 signatures | **Real**, signed at detection time each cycle, verifiable in-browser (WebCrypto) or via `/api/verify`. |
 | Solana anchors | **Real devnet memo transactions** ([Memo program](https://spl.solana.com/memo)) — explorer links in the UI. Devnet, not mainnet, and labeled as such. |
-| Live TxLINE ingestion | **Plug-in seam** (`src/feed.ts` → `TxLineAdapter` stub): subscribe, normalize to `OddsTick`, hand the same `history()` view to the detectors. Nothing else changes. |
+| Live TxLINE ingestion | **Verified working** (`src/txline.ts` + `/api/live`): real mainnet consensus odds via the TxLINE free tier (guest JWT + API token, ~60s batch delay), shown live in the dashboard's LIVE panel when `TXLINE_API_TOKEN` is configured. The detection demo still runs the recorded fixture for determinism; wiring the detectors to the live stream is the same `FeedAdapter` seam (`src/feed.ts`). |
 
 ## Repo tour
 

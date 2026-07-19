@@ -293,6 +293,24 @@ function evidenceSvg(a) {
   return `<svg viewBox="0 0 ${w} ${h}">${parts.join("")}</svg><div class="legend" style="font-size:11px">${legend.join("")}</div>`;
 }
 
+// ---------- live TxLINE panel ----------
+async function pollLive() {
+  try {
+    const r = await fetch("/api/live");
+    if (!r.ok) return; // no credentials configured — panel stays hidden
+    const d = await r.json();
+    if (!d.ok || !d.markets.length) return;
+    $("live-panel").style.display = "flex";
+    $("live-label").textContent = `${d.label} · ${d.gameState ?? "scheduled"}`;
+    $("live-odds").textContent = d.markets
+      .map((m) => `${m.market}: ${m.outcomes.map((o) => `${o.name} ${o.odds.toFixed(2)}`).join("  ")}`)
+      .join("   ·   ");
+    $("live-updated").textContent = `real TxODDS data · feed ts ${new Date(d.markets[0].ts).toISOString().slice(11, 19)}Z — detection demo runs the recorded fixture above`;
+  } catch { /* keep panel hidden */ }
+}
+
 // ---------- boot ----------
 poll();
 setInterval(poll, 1000);
+pollLive();
+setInterval(pollLive, 30000);
