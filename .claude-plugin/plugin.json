@@ -1,0 +1,12 @@
+{
+  "name": "fairwhistle",
+  "version": "1.0.0",
+  "description": "Agent access to FairWhistle, a match-integrity surveillance agent: MCP tools over FairWhistle's public read endpoints (active attested alerts, market status, a pre-trade integrity check, Ed25519 signature verification) plus a skill on how to use them as a trading agent's risk desk, including honest replay-vs-live caveats and a described live-surveillance polling pattern.",
+  "author": {
+    "name": "FairWhistle"
+  },
+  "homepage": "https://fairwhistle.vercel.app",
+  "repository": "https://github.com/chaintail/fairwhistle",
+  "license": "MIT",
+  "keywords": ["mcp", "sports", "soccer", "integrity", "surveillance", "odds", "txline", "risk"]
+}
