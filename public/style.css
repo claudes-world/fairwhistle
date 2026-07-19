@@ -161,8 +161,13 @@ header.top {
 .score {
   font-size: var(--text-2xl); font-weight: 700; display: flex; flex-wrap: wrap;
   column-gap: var(--sp-3); row-gap: 2px; align-items: baseline; letter-spacing: -0.01em;
+  min-width: 0;
 }
-.score > span { white-space: nowrap; }
+/* Short replay team-name spans must never break mid-word. The live page's
+   long fixture title (#fixture-label) is the deliberate exception — it
+   wraps normally so it doesn't clip/overflow on narrow viewports. */
+.score > span:not(#fixture-label) { white-space: nowrap; }
+#fixture-label { white-space: normal; overflow-wrap: break-word; line-height: 1.3; min-width: 0; }
 .score .num { font-family: var(--mono); font-variant-numeric: tabular-nums; color: var(--ink); }
 .sb-meta { color: var(--ink-3); font-size: var(--text-xs); display: flex; flex-direction: column; gap: 2px; font-family: var(--mono); font-variant-numeric: tabular-nums; }
 .sb-right { margin-left: auto; text-align: right; }
