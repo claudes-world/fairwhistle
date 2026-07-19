@@ -25,5 +25,14 @@
     "explorerUrl": "https://explorer.solana.com/tx/3fQNDVxX1oc6BVUV79br2WTWRVAoLVnJnBy3oJqsL4pfeonA541iFNHYDKUAGS1c9TyRqRtjkL9TGXhiD6CihYtn?cluster=devnet",
     "anchoredAt": "2026-07-19T07:56:30.086Z",
     "memo": "fairwhistle:v1:7c77e6c0ebf54071:stale_snap:a3afb19d79839457ce13b96adc7fc453e48c566b1a6b9b1d2ca6a7f4ad959ffd"
+  },
+  {
+    "coreHash": "fd21174f5a2ba63aebf23e893161606712472e8510646051c5e052f356c36e01",
+    "status": "anchored",
+    "cluster": "devnet",
+    "txSignature": "2aGGupFvzGQUKsSmmA57vMyNxaA3CezF4rRUBCSgh6vqCGoF6gb6wXZhDt9S6ecWkuoL6fHFKENo547EaTF3ZXun",
+    "explorerUrl": "https://explorer.solana.com/tx/2aGGupFvzGQUKsSmmA57vMyNxaA3CezF4rRUBCSgh6vqCGoF6gb6wXZhDt9S6ecWkuoL6fHFKENo547EaTF3ZXun?cluster=devnet",
+    "anchoredAt": "2026-07-19T20:30:07.445Z",
+    "memo": "fairwhistle:v1:live:18257739:velocity_live:fd21174f5a2ba63aebf23e893161606712472e8510646051c5e052f356c36e01"
   }
 ]
