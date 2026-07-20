@@ -5,6 +5,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>FairWhistle — match-integrity surveillance agent</title>
 <meta name="description" content="Autonomous agent watching odds microstructure for patterns consistent with fixing or informed money. Timestamped, signed, attested alerts." />
+<link rel="canonical" href="https://fairwhistle.claude.do/" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="FairWhistle" />
+<meta property="og:title" content="FairWhistle — match-integrity surveillance agent" />
+<meta property="og:description" content="Autonomous agent watching odds microstructure for patterns consistent with fixing or informed money. Timestamped, signed, attested alerts. See today's live alert on the World Cup Final: the story." />
+<meta property="og:image" content="https://fairwhistle.claude.do/story-assets/og-card.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:url" content="https://fairwhistle.claude.do/" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="FairWhistle — match-integrity surveillance agent" />
+<meta name="twitter:description" content="Autonomous agent watching odds microstructure for patterns consistent with fixing or informed money. Timestamped, signed, attested alerts." />
+<meta name="twitter:image" content="https://fairwhistle.claude.do/story-assets/og-card.png" />
 <link rel="stylesheet" href="/style.css" />
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>" />
 </head>
@@ -21,7 +34,8 @@
       <span class="badge synthetic" title="Deterministic replayed tape with 3 planted, openly-labeled anomalies. No live TxODDS data in this demo.">⚠ SYNTHETIC FIXTURE</span>
       <span class="badge" id="badge-cycle">cycle —</span>
       <span class="badge" title="Agent Ed25519 public key — verifies every alert signature">🔑 <code id="pubkey">—</code></span>
-      <span class="badge" style="border-color:var(--good)"><a href="/live.html" style="color:var(--good)">● LIVE: World Cup Final →</a></span>
+      <span class="badge live-link"><a href="/live.html">● LIVE: World Cup Final →</a></span>
+      <span class="badge"><a href="/story.html">📖 The story: today's alert →</a></span>
     </div>
   </header>
 
@@ -40,8 +54,8 @@
   </section>
 
   <section class="scoreboard" id="live-panel" style="display:none" aria-label="live TxLINE ingestion">
-    <span class="badge" style="border-color:var(--good);color:var(--good)">● LIVE TxLINE — mainnet ingestion</span>
-    <div class="sb-meta"><span id="live-label">—</span><span id="live-odds" style="font-family:var(--mono);color:var(--ink)"></span></div>
+    <span class="badge live-badge-inline">● LIVE TxLINE — mainnet ingestion</span>
+    <div class="sb-meta"><span id="live-label">—</span><span class="mono" id="live-odds"></span></div>
     <div class="sb-meta sb-right">
       <span>consensus: TXLineStablePriceDemargined · free tier, ~60s batch delay</span>
       <span id="live-updated">real TxODDS data — detection demo runs the recorded fixture above</span>
@@ -49,7 +63,7 @@
   </section>
 
   <div class="cols">
-    <section class="panel" aria-label="odds microstructure">
+    <section class="panel is-watched" aria-label="odds microstructure">
       <h2>Odds microstructure — 4 books, live replay</h2>
       <p class="sub">Decimal odds per book. Dashed verticals = public match events (repricing on public news is <em>not</em> suspicious — the agent hunts moves public information can’t explain). ⚠ marks = integrity alerts.</p>
       <div class="legend" id="legend"></div>
@@ -67,15 +81,15 @@
 
   <section class="strip" aria-label="detection rules">
     <div class="panel rule-card">
-      <h3>1 · Velocity <span style="color:var(--ink-3)">(informed drift)</span></h3>
+      <h3><span class="rule-n">1 ·</span> Velocity <span class="rule-detail">(informed drift)</span></h3>
       <p>20s log-return vs trailing 120s baseline volatility (event windows excluded). Fires at <code>|z| ≥ 5</code> sustained 3s outside public-event windows — price moving on information the market doesn’t have yet.</p>
     </div>
     <div class="panel rule-card">
-      <h3>2 · Cross-market coordination</h3>
+      <h3><span class="rule-n">2 ·</span> Cross-market coordination</h3>
       <p>≥5 abnormal book/outcome pairs (<code>|z| ≥ 4</code>) across ≥3 books and ≥2 markets inside one 8s bucket, with no match event — money landing everywhere at once.</p>
     </div>
     <div class="panel rule-card">
-      <h3>3 · Stale-then-snap</h3>
+      <h3><span class="rule-n">3 ·</span> Stale-then-snap</h3>
       <p>A book freezes its whole board ≥25s while consensus drifts ≥1.5%, then reprices ≥2.5% in a single tick — liquidity pulled while holding exposure.</p>
     </div>
   </section>

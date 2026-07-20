@@ -7,17 +7,13 @@
 <meta name="description" content="FairWhistle watching the real World Cup Final odds feed live — TxLINE mainnet consensus, integrity rules armed." />
 <link rel="stylesheet" href="/style.css" />
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>" />
-<style>
-  .badge.live-real { border-color: var(--good); color: var(--good); font-weight: 600; }
-  .kick { font-size: 15px; color: var(--ink-2); }
-</style>
 </head>
-<body>
+<body id="live-page">
 <div class="wrap">
 
   <header class="top">
     <div class="brand">
-      <h1><span class="whistle">Fair</span>Whistle <span style="color:var(--good);font-size:20px">LIVE</span></h1>
+      <h1><span class="whistle">Fair</span>Whistle <span class="live-tag">LIVE</span></h1>
       <span class="tag">real-match surveillance · World Cup Final</span>
     </div>
     <div class="badges">
@@ -30,7 +26,7 @@
 
   <section class="scoreboard" aria-label="fixture">
     <div class="score"><span id="fixture-label">—</span></div>
-    <div class="sb-meta"><span class="kick" id="kickoff">—</span><span id="last-event" style="color:var(--ink-3)"></span></div>
+    <div class="sb-meta"><span class="kick" id="kickoff">—</span><span id="last-event" class="ink-3"></span></div>
     <div class="sb-meta sb-right">
       <span id="feed-status">feed: connecting…</span>
       <span>consensus book · ~60s batch delay · free tier</span>
@@ -38,12 +34,12 @@
   </section>
 
   <div class="cols">
-    <section class="panel" aria-label="live odds">
+    <section class="panel is-watched" aria-label="live odds">
       <h2>Live consensus odds — TXLineStablePriceDemargined</h2>
-      <p class="sub">Stepped lines = real feed updates (odds hold until repriced). Dashed verticals = feed events / public-news repricing signatures — suppressed, never alerted. Range: <button class="act" id="rng-90" style="padding:2px 8px">90m</button> <button class="act" id="rng-6" style="padding:2px 8px">6h</button> <button class="act" id="rng-48" style="padding:2px 8px">48h</button></p>
+      <p class="sub">Stepped lines = real feed updates (odds hold until repriced). Dashed verticals = feed events / public-news repricing signatures — suppressed, never alerted. Range: <span class="range-controls"><button class="act" id="rng-90">90m</button><button class="act" id="rng-6">6h</button><button class="act" id="rng-48">48h</button></span></p>
       <div class="legend" id="legend-1x2"></div>
       <div class="chart-block" id="chart-1x2"></div>
-      <div class="legend" id="legend-ou" style="margin-top:12px"></div>
+      <div class="legend" id="legend-ou"></div>
       <div class="chart-block" id="chart-ou"></div>
     </section>
 
