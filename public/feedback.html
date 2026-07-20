@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>FairWhistle — TxLINE/TxODDS API feedback</title>
+<meta name="description" content="A day inside the TxLINE/TxODDS free tier building FairWhistle: what worked, the undocumented gotchas, the odds-vs-scores feed lag that explained today's live alert, and what an official SDK would have saved us." />
+<link rel="canonical" href="https://fairwhistle.claude.do/feedback.html" />
+<link rel="stylesheet" href="/style.css" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>" />
+<style>
+  main.fb { max-width: 860px; margin: 0 auto; padding: var(--sp-2) var(--sp-5) var(--sp-16); }
+
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 8px; font-family: var(--mono);
+    font-size: var(--text-xs); letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--accent); margin: 0 0 var(--sp-3);
+  }
+  .eyebrow::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
+
+  .fb-hero h1 {
+    font-size: clamp(26px, 4vw, 36px); line-height: 1.2; letter-spacing: -0.015em;
+    font-weight: 800; margin: 0 0 var(--sp-4);
+  }
+  .fb-hero p.lead { font-size: var(--text-lg); line-height: 1.6; color: var(--ink-2); margin: 0 0 var(--sp-3); }
+  .fb-hero .meta { color: var(--ink-3); font-size: var(--text-xs); font-family: var(--mono); margin: 0 0 var(--sp-8); }
+
+  section.fb-block { padding: var(--sp-10) 0; border-top: 1px solid var(--border-subtle); }
+  section.fb-block:first-of-type { border-top: none; padding-top: var(--sp-4); }
+  h2.fb-h { font-size: var(--text-xl); margin: 0 0 var(--sp-4); letter-spacing: -0.01em; font-weight: 700; }
+  main.fb p { color: var(--ink-2); line-height: 1.65; }
+  main.fb code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 1px 6px; border-radius: 4px; color: var(--ink); }
+  main.fb pre {
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-md);
+    padding: var(--sp-3) var(--sp-4); overflow-x: auto; font-size: var(--text-xs); line-height: 1.6; color: var(--ink-2);
+  }
+  main.fb pre code { background: none; padding: 0; color: inherit; }
+
+  /* worked-well */
+  .worked-card {
+    background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--good);
+    border-radius: var(--r-lg); padding: var(--sp-5) var(--sp-6);
+  }
+  .worked-card p:last-child { margin-bottom: 0; }
+  .stat-row { display: flex; gap: var(--sp-8); margin: var(--sp-4) 0 0; flex-wrap: wrap; }
+  .stat .v { font-size: var(--text-2xl); font-weight: 800; font-family: var(--mono); letter-spacing: -0.02em; color: var(--ink); }
+  .stat .l { font-size: var(--text-2xs); color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 2px; }
+
+  /* gotchas */
+  .gcard {
+    background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--warning);
+    border-radius: var(--r-lg); padding: var(--sp-4) var(--sp-5); margin-bottom: var(--sp-3);
+  }
+  .gcard:last-child { margin-bottom: 0; }
+  .gcard h3 { margin: 0 0 6px; font-size: var(--text-base); font-weight: 700; color: var(--ink); }
+  .gcard p { margin: 0 0 var(--sp-2); font-size: var(--text-sm); }
+  .gcard p:last-child { margin-bottom: 0; }
+  .gcard pre { margin: var(--sp-2) 0 0; }
+
+  /* centerpiece lag callout */
+  .lag-callout {
+    background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--critical);
+    border-radius: var(--r-lg); padding: var(--sp-6);
+  }
+  .lag-callout h3 { margin: 0 0 var(--sp-2); font-size: var(--text-lg); color: var(--ink); }
+  .lag-callout p { font-size: var(--text-sm); }
+  .lag-callout .link-back { display: inline-block; margin-top: var(--sp-3); font-size: var(--text-sm); color: var(--accent); }
+  .lag-callout .link-back:hover { text-decoration: underline; }
+
+  /* recommendations */
+  .rec-list { display: flex; flex-direction: column; gap: var(--sp-3); }
+  .rec-item {
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg);
+    padding: var(--sp-4) var(--sp-5); display: flex; gap: var(--sp-4); align-items: flex-start;
+  }
+  .rec-item .n { font-family: var(--mono); font-size: var(--text-sm); color: var(--accent); font-weight: 700; flex: none; }
+  .rec-item p { margin: 0; font-size: var(--text-sm); }
+
+  /* sdk callout */
+  .sdk-callout {
+    background: var(--surface-2); border: 1px solid var(--accent); border-radius: var(--r-lg);
+    padding: var(--sp-6);
+  }
+  .sdk-callout p { font-size: var(--text-base); color: var(--ink-2); margin: 0 0 var(--sp-3); }
+  .sdk-callout p:last-child { margin-bottom: 0; }
+  .sdk-callout a { color: var(--accent-ink); font-weight: 600; }
+  .sdk-callout code { font-size: var(--text-sm); }
+
+  .fb-nav { display: flex; flex-wrap: wrap; gap: var(--sp-3) var(--sp-6); margin-top: var(--sp-2); font-size: var(--text-sm); }
+  .fb-nav a { color: var(--ink-2); border-bottom: 1px solid var(--border-strong); padding-bottom: 1px; text-decoration: none; }
+  .fb-nav a:hover { color: var(--accent); border-color: var(--accent); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <div class="brand">
+      <h1><span class="whistle">Fair</span>Whistle</h1>
+      <span class="tag">TxLINE/TxODDS API feedback</span>
+    </div>
+    <div class="badges">
+      <span class="badge"><a href="/">← Dashboard</a></span>
+      <span class="badge"><a href="/story.html">📖 The story →</a></span>
+    </div>
+  </header>
+
+  <main class="fb">
+
+    <section class="fb-block fb-hero">
+      <span class="eyebrow">Field notes · free tier · one build day</span>
+      <h1>What we found using TxLINE/TxODDS to build a match-integrity detector</h1>
+      <p class="lead">
+        FairWhistle watches odds microstructure for repricing patterns public
+        information can't explain, using the TxLINE/TxODDS free tier as its only
+        data source — a live World Cup Final fixture, a 105-fixture historical
+        sweep, and a full day of live polling. This is the feedback the team
+        already shared in-thread, written up properly: what worked, what tripped
+        us up, and the one finding worth a design note of its own.
+      </p>
+      <p class="meta">fixture <code>18257739</code> · FIFA World Cup Final — Spain v Argentina · 2026-07-19</p>
+    </section>
+
+    <section class="fb-block" id="worked-well">
+      <h2 class="fb-h">What worked well</h2>
+      <div class="worked-card">
+        <p>
+          The free tier is genuinely real, rich data — not a toy sandbox.
+          <code>/api/odds/updates/{fixtureId}</code> returns full match history
+          (60k+ rows for one fixture), and it worked identically for a live
+          in-progress fixture and for historical fixtures pulled from a separate
+          archive used to cross-check the live path. We hit <strong style="color:var(--ink)">zero rate limits</strong>
+          across the full sweep plus a full day of live polling.
+        </p>
+        <div class="stat-row">
+          <div class="stat"><div class="v">60k+</div><div class="l">rows returned for one fixture</div></div>
+          <div class="stat"><div class="v">105</div><div class="l">fixtures swept, zero rate limits</div></div>
+          <div class="stat"><div class="v">1 day</div><div class="l">continuous live polling, zero rate limits</div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="fb-block" id="gotchas">
+      <h2 class="fb-h">Gotchas we found the hard way</h2>
+      <p style="margin-top:-8px;">No docs pointed at any of these — all discovered by trial and error while wiring the live and backtest paths.</p>
+
+      <div class="gcard">
+        <h3>Odds snapshots silently return empty without <code>asOf</code></h3>
+        <p><code>/api/odds/snapshot/{fixtureId}</code> returns nothing — no error, just an empty result — unless you pass <code>?asOf=&lt;now-ms&gt;</code>.</p>
+        <pre><code>GET /api/odds/snapshot/18257739                    -&gt; []
+GET /api/odds/snapshot/18257739?asOf=1753142400000 -&gt; [ ...rows ]</code></pre>
+      </div>
+
+      <div class="gcard">
+        <h3>Prices are decimal odds ×1000</h3>
+        <p>Undocumented, and an easy footgun if you render a raw <code>Prices</code> value as-is. Divide by 1000 to get the decimal odds you actually want.</p>
+        <pre><code>odds: row.Prices[i] / 1000</code></pre>
+      </div>
+
+      <div class="gcard">
+        <h3><code>/api/scores/updates/{fixtureId}</code> doesn't work — use the snapshot endpoint</h3>
+        <p>
+          Use <code>/api/scores/snapshot/{fixtureId}</code> instead. It returns a
+          growing list of events rather than a single current state, so you have
+          to take the max-<code>Seq</code> row yourself to know what "now" actually is.
+        </p>
+      </div>
+
+      <div class="gcard">
+        <h3><code>MarketPeriod</code> needs an explicit null filter</h3>
+        <p>
+          Half-specific rows (<code>MarketPeriod</code> = <code>half=1</code>, etc.) sit in
+          the same stream, under the same <code>SuperOddsType</code>, as full-match
+          rows. Without <code>row.MarketPeriod !== null</code> you'll silently mix
+          half-time and full-match markets together.
+        </p>
+      </div>
+
+      <div class="gcard">
+        <h3><code>PriceNames</code> / <code>MarketParameters</code> conventions took trial-and-error</h3>
+        <p>
+          Outcome naming isn't consistent across market types —
+          <code>part1</code>/<code>draw</code>/<code>part2</code> for 1X2, but
+          <code>over</code>/<code>under</code> for totals — and line selection is a
+          string to match (<code>MarketParameters === "line=2.5"</code>), not a
+          structured field.
+        </p>
+      </div>
+    </section>
+
+    <section class="fb-block" id="lag">
+      <h2 class="fb-h">The centerpiece finding: the scores feed lags the odds feed</h2>
+      <div class="lag-callout">
+        <h3>An undocumented, inconsistent lag — and it's the whole story behind today's live alert</h3>
+        <p>
+          On the free tier, the scores/action feed lags the odds feed by a
+          meaningfully long and inconsistent window. This isn't documented
+          anywhere as expected behavior, and we only found it because it's
+          exactly what happened on <a href="/story.html#centerpiece">today's live alert on <code>/story.html</code></a>:
+          a real detector fired on a real price move with zero explanation
+          visible in the data at that moment, and only <strong style="color:var(--ink)">~20–40 minutes
+          later</strong> did the score feed catch up and reveal the yellow card
+          and shot sequence that had explained the move the whole time.
+        </p>
+        <p>
+          That gap isn't a bug in our detector — it's a property of the free-tier
+          scores feed that any consumer building on real-time odds + scores
+          together needs to plan for, and right now the only way to learn about
+          it is to get flagged by it.
+        </p>
+        <a class="link-back" href="/story.html#centerpiece">Read the full timeline on the story page →</a>
+      </div>
+    </section>
+
+    <section class="fb-block" id="recommendations">
+      <h2 class="fb-h">Recommendations</h2>
+      <div class="rec-list">
+        <div class="rec-item">
+          <span class="n">01</span>
+          <p>
+            A short "gotchas" doc covering the three sharpest edges: the
+            <code>asOf</code> requirement on odds snapshots, the ×1000 price
+            scaling, and which scores endpoint is actually live
+            (<code>snapshot</code>, not <code>updates</code>).
+          </p>
+        </div>
+        <div class="rec-item">
+          <span class="n">02</span>
+          <p>
+            Publish the typical odds-vs-scores feed lag — even a rough
+            distribution would turn what we discovered empirically today into
+            documented, designed-around behavior instead of a surprise
+            downstream consumers have to hit for themselves first.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="fb-block" id="sdk">
+      <h2 class="fb-h">An official SDK would have saved real time today</h2>
+      <div class="sdk-callout">
+        <p>
+          An official SDK — similar to
+          <a href="https://github.com/0xPulsePlay/txline-kit">0xPulsePlay/txline-kit</a>
+          (<a href="https://txline-kit.0xpulseplay.com">demo</a>) — would genuinely
+          have saved real time today. The team independently rediscovered
+          several conventions a kit like that already encodes: the <code>asOf</code>
+          requirement, the price scaling, the live scores endpoint, and the
+          <code>MarketPeriod</code>/<code>PriceNames</code> shape — all of which cost
+          us trial-and-error hours a maintained client would have skipped
+          entirely.
+        </p>
+      </div>
+    </section>
+
+    <div class="fb-nav">
+      <a href="/">Live dashboard →</a>
+      <a href="/story.html">The story: today's alert →</a>
+      <a href="/docs.html">Agent &amp; API docs →</a>
+    </div>
+
+  </main>
+</div>
+</body>
+</html>
